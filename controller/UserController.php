@@ -1,7 +1,7 @@
 <?php
 require_once './model/User.php';
 class UserController{
-    public function save(){
+    public function saveUser(){
         $user = new User();
 
         $user->setId($_POST['id']);
@@ -14,5 +14,27 @@ class UserController{
         $user->setType((int)$_POST['type']);
 
         $user->save();
+    }
+
+    public function listUsers(){
+        $users = new User();
+        return $users->listAll();
+    }
+
+    public function removeUser($id){
+        $user = new User();
+        $user = $user->remove($id);
+    }
+
+    public function signIn(){
+        $user = new User();
+        $user->setUser($_POST['user']);
+        $user->setPassword($_POST['password']);
+        return $user->login();
+    }
+
+    public function profile($id){
+        $users = new User();
+        return $users->find($id);
     }
 }

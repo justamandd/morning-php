@@ -4,7 +4,8 @@ require_once 'header.php';
 
 <div class="container">
 <?php
-require_once './view/reg/user.php';
+//require_once './view/reg/user.php';
+require_once './view/login.php';
 ?>
 </div>
 

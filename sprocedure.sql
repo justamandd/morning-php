@@ -4,7 +4,7 @@
 DELIMITER $$
 CREATE PROCEDURE login(IN username VARCHAR(50), IN passwordU VARCHAR(50))
 BEGIN
-   SELECT * FROM user WHERE user = username AND password = passwordU;
+   SELECT * FROM user WHERE user = username AND password = md5(passwordU);
 END $$
 DELIMITER ;
 
@@ -25,7 +25,6 @@ END $$
 DELIMITER ;
 
 -- list all
-
 DELIMITER $$
 CREATE PROCEDURE listAll()
 BEGIN
@@ -34,10 +33,43 @@ END $$
 DELIMITER ;
 
 -- count users
-
 DELIMITER $$
 CREATE PROCEDURE countUser()
 BEGIN
 	SELECT count(*) FROM user; 
+END $$
+DELIMITER ;
+
+-- create user
+DELIMITER $$
+CREATE PROCEDURE createUser(
+IN nameU VARCHAR(50),
+IN surnameU VARCHAR(100), 
+IN dtBirth DATE,
+IN emailU VARCHAR(100),
+IN userU VARCHAR(50),
+IN passwordU VARCHAR(50),
+IN typeU INT(1)
+)
+BEGIN
+	INSERT INTO user (id, NAME, surname, dtBirthday, email, user, PASSWORD, TYPE)
+	VALUES (NULL, nameU, surnameU, dtBirth, emailU, userU, passwordU, typeU);
+END $$
+DELIMITER ;
+
+-- update user
+DELIMITER $$
+CREATE PROCEDURE updateUser(
+IN nameU VARCHAR(50),
+IN surnameU VARCHAR(100), 
+IN dtBirth DATE,
+IN emailU VARCHAR(100),
+IN userU VARCHAR(50),
+IN passwordU VARCHAR(50),
+IN typeU INT(1),
+IN idU INT 
+)
+BEGIN
+	UPDATE user SET NAME = nameU, surname = surnameU, dtBirthday = dtBirth, email = emailU, user = userU, PASSWORD = md5(passwordU), TYPE = typeU WHERE id = idU;
 END $$
 DELIMITER ;

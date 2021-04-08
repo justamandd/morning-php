@@ -1,3 +1,4 @@
+drop database morning;
 create database morning;
 use morning;
 
@@ -23,12 +24,14 @@ CREATE TABLE board (
     id int PRIMARY KEY auto_increment,
     name varchar(50),
     description varchar(256),
+    b_order int(2),
     fk_teamId int
 );
 
 CREATE TABLE list (
     id int PRIMARY KEY auto_increment,
     name varchar(35),
+    l_order int(2),
     fk_boardId int
 );
 
@@ -37,6 +40,7 @@ CREATE TABLE card (
     name varchar(50),
     description varchar(256),
     dtDelivery date,
+    c_order int(2),
     fk_listId int
 );
 

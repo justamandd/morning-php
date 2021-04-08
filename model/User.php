@@ -67,7 +67,7 @@ class User extends Db{
     }
     public function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = md5($password);
     }
     public function getType()
     {
@@ -84,24 +84,32 @@ class User extends Db{
 
         if($conn = $connection->getConnection()){
             if($this->id > 0){
-                $query = 'UPDATE user SET name = :name, surname = :surname, dtBirthday = :dtBirthday, email = :email, user = :user, password = :password, type = :type where id = :id';
+                $query = 'CALL updateUser(:name, :surname, :dtBirth, :email, :email, :user, :password, :type, :id)';
                 $stmt = $conn->prepare($query);
                 try {
                     if($stmt->execute(array(':name'=>$this->name, ':surname'=>$this->surname, ':dtBirthday'=>$this->dtBirth, ':email'=>$this->email, ':user'=>$this->user, ':password'=>$this->password, ':type'=>$this->type, ':id'=>$this->id))){
                         $result = $stmt->rowCount();
                     }
                 } catch (PDOException $e) {
-                    
+                    echo 'ERRO: '.$e->getMessage();
                 }
             }else{
-                try {
-                    $query = 'INSERT INTO user (id, name, surname, dtBirthday, email, user, password, type) values (null, :name, :surname, :dtBirth, :email, :user, :password, :type)';
-                    $stmt = $conn->prepare($query);
-                    if($stmt->execute(array(':name'=>$this->name, ':surname'=>$this->surname, ':dtBirth'=>$this->dtBirth, ':email'=>$this->email, ':user'=>$this->user, ':password'=>$this->password, ':type'=>$this->type))){
-                        $result = $stmt->rowCount();
+                $query = 'SELECT * FROM user WHERE user = :user';
+                $stmt = $conn->prepare($query);
+                if($stmt->execute(array(':user'=>$this->user))){
+                    if($stmt->rowCount() == 1){
+                        echo 'user existente';
+                    }else{
+                        try {
+                            $query = 'CALL createUser(:name, :surname, :dtBirth, :email, :user, :password, :type)';
+                            $stmt = $conn->prepare($query);
+                            if($stmt->execute(array(':name'=>$this->name, ':surname'=>$this->surname, ':dtBirth'=>$this->dtBirth, ':email'=>$this->email, ':user'=>$this->user, ':password'=>$this->password, ':type'=>$this->type))){
+                                $result = $stmt->rowCount();
+                            }
+                        } catch (PDOException $e) {
+                            echo 'ERRO: '.$e->getMessage();
+                        }
                     }
-                } catch (PDOException $e) {
-                    echo 'ERRO: '.$e->getMessage();
                 }
             }
         }
@@ -126,7 +134,7 @@ class User extends Db{
         $stmt = $conn->prepare($query);
         if($stmt->execute(array(':id'=>$id))){
             if($stmt->rowCount() > 0){
-                $result = $stmt->fetchObject(Usuario::class);
+                $result = $stmt->fetchObject(User::class);
             }else{
                 $result = false;
             }
@@ -153,11 +161,29 @@ class User extends Db{
         $stmt = $conn->prepare($query);
         if($stmt->execute(array(':username'=>$this->user, ':password'=>$this->password))){
             if($stmt->rowCount() > 0){
-                $result = $stmt->fetchObject(Usuario::class);
+                $result = $stmt->fetchObject(User::class);
             }else{
                 $result = false;
             }
             return $result;
         }
     }
+
+    public function listAll(){
+        $connection = new Connection();
+        $conn = $connection->getConnection();
+        $query = "CALL listAll()";
+        $stmt = $conn->prepare($query);
+        $result = array();
+        if($stmt->execute()){
+            while ($rs = $stmt->fetchObject(User::class)) {
+                $result[] = $rs;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    
 }

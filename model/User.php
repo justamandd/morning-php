@@ -98,7 +98,7 @@ class User extends Db{
                 $stmt = $conn->prepare($query);
                 if($stmt->execute(array(':user'=>$this->user))){
                     if($stmt->rowCount() == 1){
-                        echo 'user existente';
+                        return 'uequals';
                     }else{
                         try {
                             $query = 'CALL createUser(:name, :surname, :dtBirth, :email, :user, :password, :type)';

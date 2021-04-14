@@ -53,7 +53,7 @@ IN typeU INT(1)
 )
 BEGIN
 	INSERT INTO user (id, NAME, surname, dtBirthday, email, user, PASSWORD, TYPE)
-	VALUES (NULL, nameU, surnameU, dtBirth, emailU, userU, passwordU, typeU);
+	VALUES (NULL, nameU, surnameU, dtBirth, emailU, userU, md5(passwordU), typeU);
 END $$
 DELIMITER ;
 
@@ -70,6 +70,48 @@ IN typeU INT(1),
 IN idU INT 
 )
 BEGIN
-	UPDATE user SET NAME = nameU, surname = surnameU, dtBirthday = dtBirth, email = emailU, user = userU, PASSWORD = md5(passwordU), TYPE = typeU WHERE id = idU;
+	UPDATE user SET NAME = nameU, surname = surnameU, dtBirthday = dtBirth, email = emailU, user = userU,
+	PASSWORD = md5(passwordU), TYPE = typeU WHERE id = idU;
 END $$
 DELIMITER ;
+
+
+-- Team
+
+#vai ter que reformular
+DELIMITER $$
+CREATE PROCEDURE createTeam(
+IN nameT VARCHAR(50),
+IN descriptionT VARCHAR(256),
+IN idU INT
+)
+BEGIN
+
+	INSERT INTO team VALUES (NULL, nameT, descriptionT, idU);
+
+END $$
+DELIMITER ;
+
+-- list all teams do user
+DELIMITER $$
+CREATE PROCEDURE listAllTeamsUser(IN userId INT)
+BEGIN
+	SELECT * FROM team WHERE fk_userId = userId;
+END $$
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

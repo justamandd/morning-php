@@ -4,7 +4,7 @@ class UserController{
     public function saveUser(){
         $user = new User();
 
-        $user->setId($_POST['id']);
+        if(isset($_SESSION['id'])){ $user->setId($_POST['id']); }
         $user->setName($_POST['name']);
         $user->setSurname($_POST['surname']);
         $user->setDtBirth($_POST['dtBirthday']);
@@ -13,7 +13,11 @@ class UserController{
         $user->setPassword($_POST['password']);
         $user->setType((int)$_POST['type']);
 
-        $user->save();
+        if($user->save() == 'uequals'){
+            echo '<div class="alert h6 mt-5" role="alert" style="color: #856404;background-color: #fff3cd;border-color: #ffeeba;">
+                    User or password wrong.
+                  </div>';
+        }
     }
 
     public function listUsers(){

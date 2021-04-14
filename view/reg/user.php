@@ -1,6 +1,3 @@
-<?php
-    ob_start();
-?>
 <form action="" method="POST" name="frmPerson" id="frmPerson" style="margin: auto;" class="mt-4">
     <div class="card">
         <div class="card-header">
@@ -54,9 +51,6 @@
 if(isset($_POST['confirmBtn'])){
     require_once 'controller/UserController.php';
     call_user_func(array('UserController','saveUser'));
+    
 
-    //redirecionar o usuário
-
-
-    ob_end_flush();
 }

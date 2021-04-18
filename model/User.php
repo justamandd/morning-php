@@ -84,9 +84,9 @@ class User extends Db{
 
         if($conn = $connection->getConnection()){
             if($this->id > 0){
-                $query = 'CALL updateUser(:name, :surname, :dtBirth, :email, :email, :user, :password, :type, :id)';
-                $stmt = $conn->prepare($query);
                 try {
+                    $query = 'CALL updateUser(:name, :surname, :dtBirth, :email, :email, :user, :password, :type, :id)';
+                    $stmt = $conn->prepare($query);
                     if($stmt->execute(array(':name'=>$this->name, ':surname'=>$this->surname, ':dtBirthday'=>$this->dtBirth, ':email'=>$this->email, ':user'=>$this->user, ':password'=>$this->password, ':type'=>$this->type, ':id'=>$this->id))){
                         $result = $stmt->rowCount();
                     }
@@ -115,75 +115,94 @@ class User extends Db{
         }
         return $result;
     }
+
     public function remove($id){
-        $result = false;
         $connection = new Connection();
         $conn = $connection->getConnection();
-        $query = "CALL deleteUser(:id)";
-        $stmt = $conn->prepare($query);
-        if($stmt->execute(array(':id'=>$id))){
-            $result = true;
+        try {
+            $result = false;
+            $query = "CALL deleteUser(:id)";
+            $stmt = $conn->prepare($query);
+            if($stmt->execute(array(':id'=>$id))){
+                $result = true;
+            }
+            return $result;
+        } catch (PDOExcepion $e) {
+            echo 'ERRO: '.$e->getMessage();
         }
-        return $result;
     }
 
     public function find($id){
         $connection = new Connection();
         $conn = $connection->getConnection();
-        $query = "CALL findUser(:id)";
-        $stmt = $conn->prepare($query);
-        if($stmt->execute(array(':id'=>$id))){
-            if($stmt->rowCount() > 0){
-                $result = $stmt->fetchObject(User::class);
-            }else{
-                $result = false;
+        try {
+            $query = "CALL findUser(:id)";
+            $stmt = $conn->prepare($query);
+            if($stmt->execute(array(':id'=>$id))){
+                if($stmt->rowCount() > 0){
+                    $result = $stmt->fetchObject(User::class);
+                }else{
+                    $result = false;
+                }
             }
+            return $result;
+        } catch (PDOExcepion $e) {
+            echo 'ERRO: '.$e->getMessage();
         }
-        return $result;
     }
     
     public function count(){
         $connection = new Connection();
         $conn = $connection->getConnection();
-        $query = "CALL countUser()";
-        $stmt = $conn->prepare($query);
-        $count = $stmt->exec();
-        if(isset($count) && !empty($count)){
-            return $count;
+        try {
+            $query = "CALL countUser()";
+            $stmt = $conn->prepare($query);
+            $count = $stmt->exec();
+            if(isset($count) && !empty($count)){
+                return $count;
+            }
+            return false; 
+        } catch (PDOExcepion $e) {
+            echo 'ERRO: '.$e->getMessage();
         }
-        return false;
     }
 
     public function login(){
         $connection = new Connection();
         $conn = $connection->getConnection();
-        $query = 'CALL login(:username,:password)';
-        $stmt = $conn->prepare($query);
-        if($stmt->execute(array(':username'=>$this->user, ':password'=>$this->password))){
-            if($stmt->rowCount() > 0){
-                $result = $stmt->fetchObject(User::class);
-            }else{
-                $result = false;
+        try {
+            $query = 'CALL login(:username,:password)';
+            $stmt = $conn->prepare($query);
+            if($stmt->execute(array(':username'=>$this->user, ':password'=>$this->password))){
+                if($stmt->rowCount() > 0){
+                    $result = $stmt->fetchObject(User::class);
+                }else{
+                    $result = false;
+                }
+                return $result;
             }
-            return $result;
+        } catch (PDOException $e) {
+            echo 'ERRO: '.$e->getMessage();
         }
     }
 
     public function listAll(){
         $connection = new Connection();
         $conn = $connection->getConnection();
-        $query = "CALL listAll()";
-        $stmt = $conn->prepare($query);
-        $result = array();
-        if($stmt->execute()){
-            while ($rs = $stmt->fetchObject(User::class)) {
-                $result[] = $rs;
+        try {
+            $query = "CALL listAll()";
+            $stmt = $conn->prepare($query);
+            $result = array();
+            if($stmt->execute()){
+                while ($rs = $stmt->fetchObject(User::class)) {
+                    $result[] = $rs;
+                }
+            }else{
+                $result = false;
             }
-        }else{
-            $result = false;
+            return $result; 
+        } catch (PDOExcepion $e) {
+            echo 'ERRO: '.$e->getMessage();
         }
-        return $result;
-    }
-
-    
+    }    
 }

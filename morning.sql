@@ -157,3 +157,13 @@ ALTER TABLE teamEmail ADD CONSTRAINT FK_teamEmail_3
 
 create user mornode@localhost identified by 'master';
 grant select, insert, update, delete, execute on morning.* to mornode@localhost;
+
+
+
+
+
+
+
+
+
+

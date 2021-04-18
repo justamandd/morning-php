@@ -1,9 +1,5 @@
 <?php
 require_once './model/Team.php';
-
-print_r($_SESSION);
-
-
 class TeamController{
 
     public function saveTeam(){
@@ -29,6 +25,24 @@ class TeamController{
             $team->setIdUser($_SESSION['id']);
 
             return $team->listTeams(); 
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+    public function removeTeam(){
+        try {
+            $team = new Team();
+            return $team->remove($_POST['id']);
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+    public function findTeam(){
+        try {
+            $team = new Team();
+            return $team->find($_POST['id']);
         } catch (PDOException $e) {
             echo $e;
         }

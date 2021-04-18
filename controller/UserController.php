@@ -14,8 +14,8 @@ class UserController{
         $user->setType((int)$_POST['type']);
 
         if($user->save() == 'uequals'){
-            echo '<div class="alert h6 mt-5" role="alert" style="color: #856404;background-color: #fff3cd;border-color: #ffeeba;">
-                    User or password wrong.
+            echo '<div class="alert h6 mt-2" role="alert" style="color: #856404;background-color: #fff3cd;border-color: #ffeeba;">
+                    User already exists.
                   </div>';
         }
     }

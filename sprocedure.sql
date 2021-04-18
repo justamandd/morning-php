@@ -100,6 +100,66 @@ BEGIN
 END $$
 DELIMITER ;
 
+# update team
+DELIMITER $$
+CREATE PROCEDURE updateTeam(IN teamId INT, IN nameT VARCHAR(50), IN descT VARCHAR(256))
+BEGIN
+	UPDATE team SET NAME = nameT, description = descT WHERE id = teamId;
+END $$
+DELIMITER ;
+
+
+# delete team
+DELIMITER $$
+CREATE PROCEDURE deleteTeam(IN teamId INT)
+BEGIN
+	DELETE FROM team WHERE id = teamId;
+END $$
+DELIMITER ;
+
+# find team
+DELIMITER $$
+CREATE PROCEDURE findTeam(IN teamId INT)
+BEGIN
+	SELECT * FROM team WHERE id = teamId;
+END $$
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

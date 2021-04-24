@@ -8,7 +8,6 @@ abstract class Db{
 
     abstract public function find($id);
     
-    abstract public function count();
 }
 
 ?>

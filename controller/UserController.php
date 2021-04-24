@@ -1,10 +1,10 @@
 <?php
 require_once './model/User.php';
 class UserController{
-    public function save(){
+    public function saveUser(){
         $user = new User();
 
-        $user->setId($_POST['id']);
+        if(isset($_SESSION['id'])){ $user->setId($_POST['id']); }
         $user->setName($_POST['name']);
         $user->setSurname($_POST['surname']);
         $user->setDtBirth($_POST['dtBirthday']);
@@ -13,6 +13,32 @@ class UserController{
         $user->setPassword($_POST['password']);
         $user->setType((int)$_POST['type']);
 
-        $user->save();
+        if($user->save() == 'uequals'){
+            echo '<div class="alert h6 mt-2" role="alert" style="color: #856404;background-color: #fff3cd;border-color: #ffeeba;">
+                    User already exists.
+                  </div>';
+        }
+    }
+
+    public function listUsers(){
+        $users = new User();
+        return $users->listAll();
+    }
+
+    public function removeUser($id){
+        $user = new User();
+        $user = $user->remove($id);
+    }
+
+    public function signIn(){
+        $user = new User();
+        $user->setUser($_POST['user']);
+        $user->setPassword($_POST['password']);
+        return $user->login();
+    }
+
+    public function profile($id){
+        $users = new User();
+        return $users->find($id);
     }
 }

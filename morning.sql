@@ -24,8 +24,7 @@ CREATE TABLE board (
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(50),
     description varchar(256),
-    fk_teamId int,
-    b_order int(2)
+    fk_teamId int
 );
 
 CREATE TABLE list (
@@ -83,11 +82,16 @@ CREATE TABLE teamEmail (
 
 CREATE TABLE email (
     id int PRIMARY KEY,
-    email varchar(100)
+    email varchar(100),
+    fk_teamId int
 );
  
  # posso fazer essa conexão ?
  
+ALTER TABLE board ADD CONSTRAINT FK_email_1
+    FOREIGN KEY (fk_teamId)
+    REFERENCES team (id);
+
 ALTER TABLE team ADD CONSTRAINT FK_team_2
     FOREIGN KEY (fk_userId)
     REFERENCES user (id);

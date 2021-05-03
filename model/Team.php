@@ -48,7 +48,7 @@ class Team extends Db{
         $conn = $connection->getConnection();
         if($this->id > 0){
             try {
-                $query = 'CALL updateTeam(:teamId,:name, :desc)';
+                $query = 'UPDATE team SET NAME = :name, description = :desc WHERE id = :teamId';
                 $stmt = $conn->prepare($query);
                 if($stmt->execute(array(':teamId'=>$this->id,':name'=>$this->name, ':desc'=>$this->description)))
                 {
@@ -59,7 +59,7 @@ class Team extends Db{
             }
         }else{
             try {
-                $query = 'CALL createTeam(:name, :desc, :idU)';
+                $query = 'INSERT INTO team VALUES (NULL, :name, :desc, :idU)';
                 $stmt = $conn->prepare($query);
                 if($stmt->execute(array(':name'=>$this->name, ':desc'=>$this->description, ':idU'=>$this->idUser)))
                 {
@@ -77,9 +77,9 @@ class Team extends Db{
         $conn = $connection->getConnection();
         try 
         {
-            $query = 'CALL deleteTeam(:id)';
+            $query = 'DELETE FROM team WHERE id = :id';
             $stmt = $conn->prepare($query);
-            if($stmt->execute(array(':id'=>$this->id)))
+            if($stmt->execute(array(':id'=>$id)))
             {
                 $result = $stmt->rowCount();
             }
@@ -87,13 +87,13 @@ class Team extends Db{
         {
             echo 'ERRO: '.$e->getMessage();
         }
-        return $result;
+        return $result > 0 ? true : false;
     }
     public function find($id){
         $connection = new Connection();
         $conn = $connection->getConnection();
         try {
-            $query = "CALL findTeam(:id)";
+            $query = "SELECT * FROM team WHERE id = :id";
             $stmt = $conn->prepare($query);
             if($stmt->execute(array(':id'=>$id))){
                 if($stmt->rowCount() > 0){
@@ -103,7 +103,7 @@ class Team extends Db{
                 }
             }
             return $result;
-        } catch (PDOExcepion $e) {
+        } catch (PDOException $e) {
             echo 'ERRO: '.$e->getMessage();
         }
     }
@@ -112,7 +112,7 @@ class Team extends Db{
         $connection = new Connection();
         $conn = $connection->getConnection();
         try {
-            $query = "CALL listAllTeamsUser(:idUser)";
+            $query = "SELECT * FROM team WHERE fk_userId = :idUser";
             $stmt = $conn->prepare($query);
             $result = array();
             if($stmt->execute(array(':idUser'=>$this->idUser))){

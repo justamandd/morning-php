@@ -1,5 +1,5 @@
 <form action="" method="post" id="frmTeam" name="frmTeam">
-    <div class="card">
+    <div class="card mt-5">
         <div class="card-header">
             <h3>Create a team</h3>
         </div>
@@ -20,5 +20,7 @@
 
 if(isset($_POST['btnSub'])){
     require_once 'controller/TeamController.php';
-    call_user_func(array('TeamController','saveTeam'));
+    if(call_user_func(array('TeamController','saveTeam'))){
+        echo '<script>window.location.href = "/morning-php/";</script>';
+    };
 }

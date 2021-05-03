@@ -85,7 +85,7 @@ class User extends Db{
         if($conn = $connection->getConnection()){
             if($this->id > 0){
                 try {
-                    $query = 'CALL updateUser(:name, :surname, :dtBirth, :email, :email, :user, :password, :type, :id)';
+                    $query = 'UPDATE user SET name = :name, surname = :surname, dtBirthday = :dtBirth, email = :email, user = :user, password = :password, type = :type where id = :id';
                     $stmt = $conn->prepare($query);
                     if($stmt->execute(array(':name'=>$this->name, ':surname'=>$this->surname, ':dtBirthday'=>$this->dtBirth, ':email'=>$this->email, ':user'=>$this->user, ':password'=>$this->password, ':type'=>$this->type, ':id'=>$this->id))){
                         $result = $stmt->rowCount();
@@ -101,7 +101,7 @@ class User extends Db{
                         return 'uequals';
                     }else{
                         try {
-                            $query = 'CALL createUser(:name, :surname, :dtBirth, :email, :user, :password, :type)';
+                            $query = 'INSERT INTO user VALUES (NULL, :name, :surname, :dtBirth, :email, :user, md5(:password), :type)';
                             $stmt = $conn->prepare($query);
                             if($stmt->execute(array(':name'=>$this->name, ':surname'=>$this->surname, ':dtBirth'=>$this->dtBirth, ':email'=>$this->email, ':user'=>$this->user, ':password'=>$this->password, ':type'=>$this->type))){
                                 $result = $stmt->rowCount();
@@ -121,7 +121,7 @@ class User extends Db{
         $conn = $connection->getConnection();
         try {
             $result = false;
-            $query = "CALL deleteUser(:id)";
+            $query = "SELECT * FROM user WHERE id = :id";
             $stmt = $conn->prepare($query);
             if($stmt->execute(array(':id'=>$id))){
                 $result = true;
@@ -136,7 +136,7 @@ class User extends Db{
         $connection = new Connection();
         $conn = $connection->getConnection();
         try {
-            $query = "CALL findUser(:id)";
+            $query = "SELECT * FROM user WHERE id = :id";
             $stmt = $conn->prepare($query);
             if($stmt->execute(array(':id'=>$id))){
                 if($stmt->rowCount() > 0){
@@ -155,7 +155,7 @@ class User extends Db{
         $connection = new Connection();
         $conn = $connection->getConnection();
         try {
-            $query = "CALL countUser()";
+            $query = "SELECT count(*) FROM user";
             $stmt = $conn->prepare($query);
             $count = $stmt->exec();
             if(isset($count) && !empty($count)){
@@ -171,7 +171,7 @@ class User extends Db{
         $connection = new Connection();
         $conn = $connection->getConnection();
         try {
-            $query = 'CALL login(:username,:password)';
+            $query = "SELECT * FROM user WHERE user = :username AND password = md5(:password)";
             $stmt = $conn->prepare($query);
             if($stmt->execute(array(':username'=>$this->user, ':password'=>$this->password))){
                 if($stmt->rowCount() > 0){
@@ -190,7 +190,7 @@ class User extends Db{
         $connection = new Connection();
         $conn = $connection->getConnection();
         try {
-            $query = "CALL listAll()";
+            $query = "SELECT * FROM user";
             $stmt = $conn->prepare($query);
             $result = array();
             if($stmt->execute()){

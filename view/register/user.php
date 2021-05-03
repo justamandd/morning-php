@@ -50,7 +50,8 @@
 
 if(isset($_POST['confirmBtn'])){
     require_once 'controller/UserController.php';
-    call_user_func(array('UserController','saveUser'));
-    
-
+    if(call_user_func(array('UserController','saveUser'))){
+        echo '<script> window.alert("Account successfully created");</script>';
+        echo '<script>window.location.href = "?action=signin";</script>';
+    };
 }

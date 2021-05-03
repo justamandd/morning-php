@@ -11,7 +11,9 @@ class TeamController{
             $team->setDescription($_POST['description']);
             $team->setIdUser($_SESSION['id']);
     
-            $team->save();
+            if($team->save()){
+                return true;
+            };
 
 
             // adicionar retorno
@@ -33,7 +35,7 @@ class TeamController{
     public function removeTeam(){
         try {
             $team = new Team();
-            return $team->remove($_POST['id']);
+            return $team->remove($_GET['id_team']);
         } catch (PDOException $e) {
             echo $e;
         }

@@ -42,10 +42,7 @@
             $_SESSION['username'] = $_POST['user'];
             $_SESSION['id'] = $user->getId();
 
-            print_r($_SESSION);
+            echo "<script> window.location.href = '/morning-php/' </script>";
         }
-
-        //redirecionar
-        //header('Location: index.php?page=board');
     }
 ?>

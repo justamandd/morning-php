@@ -17,6 +17,8 @@ class UserController{
             echo '<div class="alert h6 mt-2" role="alert" style="color: #856404;background-color: #fff3cd;border-color: #ffeeba;">
                     User already exists.
                   </div>';
+        }else{
+            return true;
         }
     }
 
